@@ -16,61 +16,99 @@
 #      directories.
 # 
 define backupninja::rdiff(
-  $order = 90, $ensure = present, $user = false, $home = false, $host = false,
+  $order = 90,
+  $ensure = present,
+  $user = false,
+  $home = false,
+  $host = false,
   $type = 'local',
-  $exclude = [ "/home/*/.gnupg", "/home/*/.local/share/Trash", "/home/*/.Trash",
-               "/home/*/.thumbnails", "/home/*/.beagle", "/home/*/.aMule",
-               "/home/*/gtk-gnutella-downloads" ],
-  $include = [ "/var/spool/cron/crontabs", "/var/backups", "/etc", "/root",
-               "/home", "/usr/local/*bin", "/var/lib/dpkg/status*" ],
-  $vsinclude = false, $keep = 30, $sshoptions = false, $options = '--force', $ssh_dir_manage = true,
-  $ssh_dir = false, $authorized_keys_file = false, $installuser = true, $installkey = true, $key = false,
-  $backuptag = false, $home = false, $backupkeytype = "rsa", $backupkeystore = false, $extras = false, $nagios2_description = 'backups')
-{
+  $exclude = [
+    "/home/*/.gnupg",
+    "/home/*/.local/share/Trash",
+    "/home/*/.Trash",
+    "/home/*/.thumbnails",
+    "/home/*/.beagle",
+    "/home/*/.aMule",
+    "/home/*/gtk-gnutella-downloads",
+    ],
+  $include = [
+    "/var/spool/cron/crontabs",
+    "/var/backups",
+    "/etc",
+    "/root",
+    "/home",
+    "/usr/local/*bin",
+    "/var/lib/dpkg/status*",
+    ],
+  $vsinclude = false,
+  $keep = 30,
+  $sshoptions = false,
+  $options = '--force',
+  $ssh_dir_manage = true,
+  $ssh_dir = false,
+  $authorized_keys_file = false,
+  $installuser = true,
+  $installkey = true,
+  $key = false,
+  $backuptag = false,
+  $home = false,
+  $backupkeytype = "rsa",
+  $backupkeystore = false,
+  $extras = false,
+  $nagios2_description = 'backups',
+) {
   include backupninja::client::rdiff_backup
 
   case $type {
     'local': {
-      $directory = "$home/rdiff-backup/"
+      $directory = "${home}/rdiff-backup/"
     }
     'remote': {
-      case $host { false: { err("need to define a host for remote backups!") } }
-      $real_backuptag = $backuptag ? {
-          false => "backupninja-$host",
-          default => $backuptag
+      case $host {
+        false: {
+          err("need to define a host for remote backups!")
+        }
       }
-
+      $real_backuptag = $backuptag ? {
+        false   => "backupninja-${host}",
+        default => $backuptag
+      }
       $real_home = $home ? {
-        false => "/home/${user}-${name}",
+        false   => "/home/${user}-${name}",
         default => $home,
       }
-      $directory = "$real_home/rdiff-backup/"
+      $directory = "${real_home}/rdiff-backup/"
 
-      backupninja::server::sandbox
-      {
-        "${user}-${name}": user => $user, host => $fqdn, dir => $real_home,
-        manage_ssh_dir => $ssh_dir_manage, ssh_dir => $ssh_dir, key => $key,
-        authorized_keys_file => $authorized_keys_file, installuser => $installuser,
-        backuptag => $real_backuptag, keytype => $backupkeytype, backupkeys => $backupkeystore,
-        nagios2_description => $nagios2_description
+      backupninja::server::sandbox { "${user}-${name}":
+        user                 => $user,
+        host                 => $fqdn,
+        dir                  => $real_home,
+        manage_ssh_dir       => $ssh_dir_manage,
+        ssh_dir              => $ssh_dir,
+        key                  => $key,
+        authorized_keys_file => $authorized_keys_file,
+        installuser          => $installuser,
+        backuptag            => $real_backuptag,
+        keytype              => $backupkeytype,
+        backupkeys           => $backupkeystore,
+        nagios2_description  => $nagios2_description
       }
-     
-      backupninja::client::key
-      {
-        "${user}-${name}": user => $user, host => $host,
+
+      backupninja::client::key { "${user}-${name}":
+        user       => $user,
+        host       => $host,
         installkey => $installkey,
-        keytype => $backupkeytype,
-        keystore => $backupkeystore,
+        keytype    => $backupkeytype,
+        keystore   => $backupkeystore,
       }
     }
   }
   file { "${backupninja::client::defaults::configdir}/${order}_${name}.rdiff":
-    ensure => $ensure,
+    ensure  => $ensure,
     content => template('backupninja/rdiff.conf.erb'),
-    owner => root,
-    group => root,
-    mode => 0600,
-    require => File["${backupninja::client::defaults::configdir}"]
+    owner   => root,
+    group   => root,
+    mode    => 0600,
+    require => File[$backupninja::client::defaults::configdir],
   }
 }
-  

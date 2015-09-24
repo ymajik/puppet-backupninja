@@ -1,4 +1,1 @@
-class backupninja {
-
-}
-
+class backupninja { }

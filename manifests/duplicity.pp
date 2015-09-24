@@ -37,65 +37,70 @@
 #   - There's no support for a 'local' type in backupninja's duplicity
 #     handler on version 0.9.6-4, which is the version available in stable and
 #     testing debian repositories by the time of this writing.
-define backupninja::duplicity( $order  = 90,
-                               $ensure = present,
-                               # options to the config file
-                               $options     = false,
-                               $nicelevel   = false,
-                               $testconnect = false,
-                               $tmpdir      = false,
-                               # [gpg]
-                               $sign       = false,
-                               $encryptkey = false,
-                               $signkey    = false,
-                               $password   = false,
-                               # [source]
-                               $include = [ "/var/spool/cron/crontabs",
-                                            "/var/backups",
-                                            "/etc",
-                                            "/root",
-                                            "/home",
-                                            "/usr/local/*bin",
-                                            "/var/lib/dpkg/status*" ],
-                               $exclude = [ "/home/*/.gnupg",
-                                            "/home/*/.local/share/Trash",
-                                            "/home/*/.Trash",
-                                            "/home/*/.thumbnails",
-                                            "/home/*/.beagle",
-                                            "/home/*/.aMule",
-                                            "/home/*/.gnupg",
-                                            "/home/*/.gpg",
-                                            "/home/*/.ssh",
-                                            "/home/*/gtk-gnutella-downloads",
-                                            "/etc/ssh/*" ],
-                               $vsinclude = false,
-                               # [dest]
-                               $incremental   = "yes",
-                               $keep          = false,
-                               $bandwidthlimit = false,
-                               $sshoptions    = false,
-                               $destdir       = false,
-                               $desthost      = false,
-                               $destuser      = false,
-                               # configs to backupninja client
-                               $backupkeystore       = false,
-                               $backupkeytype        = "rsa",
-                               # options to backupninja server sandbox
-                               $ssh_dir_manage       = true,
-                               $ssh_dir              = false,
-                               $authorized_keys_file = false,
-                               $installuser          = true,
-                               $backuptag            = false,
-                               # key options
-                               $installkey           = true ) {
-
+define backupninja::duplicity (
+  $order = 90,
+  $ensure = present,
+  # options to the config file
+  $options = false,
+  $nicelevel = false,
+  $testconnect = false,
+  $tmpdir = false,
+  # [gpg]
+  $sign = false,
+  $encryptkey = false,
+  $signkey = false,
+  $password = false,
+  # [source]
+  $include = [
+    "/var/spool/cron/crontabs",
+    "/var/backups",
+    "/etc",
+    "/root",
+    "/home",
+    "/usr/local/*bin",
+    "/var/lib/dpkg/status*",
+    ],
+  $exclude = [
+    "/home/*/.gnupg",
+    "/home/*/.local/share/Trash",
+    "/home/*/.Trash",
+    "/home/*/.thumbnails",
+    "/home/*/.beagle",
+    "/home/*/.aMule",
+    "/home/*/.gnupg",
+    "/home/*/.gpg",
+    "/home/*/.ssh",
+    "/home/*/gtk-gnutella-downloads",
+    "/etc/ssh/*",
+    ],
+  $vsinclude = false,
+  # [dest]
+  $incremental = "yes",
+  $keep = false,
+  $bandwidthlimit = false,
+  $sshoptions = false,
+  $destdir = false,
+  $desthost = false,
+  $destuser = false,
+  # configs to backupninja client
+  $backupkeystore = false,
+  $backupkeytype = "rsa",
+  # options to backupninja server sandbox
+  $ssh_dir_manage = true,
+  $ssh_dir = false,
+  $authorized_keys_file = false,
+  $installuser = true,
+  $backuptag = false,
+  # key options
+  $installkey = true,
+) {
   # the client with configs for this machine
   include backupninja::client::defaults
 
-  case $desthost { false: { err("need to define a destination host for remote backups!") } }
-  case $destdir { false: { err("need to define a destination directory for remote backups!") } }
-  case $password { false: { err("a password is necessary either to unlock the GPG key, or for symmetric encryption!") } }
-  
+  validate_string($desthost)
+  validate_string($destdir)
+  validate_string($password)
+
   # guarantees there's a configured backup space for this backup
   backupninja::server::sandbox { "${user}-${name}":
     user                 => $destuser,
@@ -109,7 +114,7 @@ define backupninja::duplicity( $order  = 90,
     backupkeys           => $backupkeystore,
     keytype              => $backupkeytype,
   }
-  
+
   # the client's ssh key
   backupninja::client::key { "${destuser}-${name}":
     user       => $destuser,
@@ -129,4 +134,3 @@ define backupninja::duplicity( $order  = 90,
     require => File["${backupninja::client::defaults::configdir}"]
   }
 }
-  

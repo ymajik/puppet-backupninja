@@ -15,24 +15,32 @@
 #   and compress take true/false rather than yes/no.
 # 
 define backupninja::mysql(
-  $order = 10, $ensure = present, $user = false, $dbusername = false, $dbpassword = false,
-  $dbhost = 'localhost', $databases = 'all', $backupdir = false, $hotcopy = false,
-  $sqldump = false, $compress = false, $configfile = true,
-  $vsname = false)
-{
-  
+  $order = 10,
+  $ensure = present,
+  $user = false,
+  $dbusername = false,
+  $dbpassword = false,
+  $dbhost = 'localhost',
+  $databases = 'all',
+  $backupdir = false,
+  $hotcopy = false,
+  $sqldump = false,
+  $compress = false,
+  $configfile = true,
+  $vsname = false,
+) {
   $real_configfile = $configfile ? {
-    true => "/etc/mysql/debian.cnf",
+    true    => '/etc/mysql/debian.cnf',
     default => $configfile,
   }
 
   include backupninja::client::defaults
   file { "${backupninja::client::defaults::configdir}/${order}_${name}.mysql":
-    ensure => $ensure,
+    ensure  => $ensure,
     content => template('backupninja/mysql.conf.erb'),
-    owner => root,
-    group => root,
-    mode => 0600,
-    require => File["${backupninja::client::defaults::configdir}"]
+    owner   => root,
+    group   => root,
+    mode    => 0600,
+    require => File[$backupninja::client::defaults::configdir],
   }
 }
