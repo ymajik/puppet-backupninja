@@ -1,5 +1,3 @@
-import "config.pp"
-import "dup.pp"
 import "labelmount.pp"
 import "maildir.pp"
 import "mysql.pp"
