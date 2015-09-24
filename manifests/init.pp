@@ -1,4 +1,3 @@
-import "client.pp"
 import "config.pp"
 import "dup.pp"
 import "labelmount.pp"
