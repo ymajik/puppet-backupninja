@@ -1,10 +1,21 @@
-class backupninja::client::defaults {
+# XXX Move defaults to real/up-to-date params.pp-like class
+class backupninja::client::defaults (
+  $cfg_override,
+  $backupkeytype,
+  $backupkeytype,
+  $keydestination,
+  $keyowner,
+  $keygroup,
+  $keymanage,
+  $ssh_dir_manage,
+  $backupninja_ensure_version,
+){
   $configdir = $cfg_override ? {
-    ''      => "/etc/backup.d",
+    ''      => '/etc/backup.d',
     default => $cfg_override,
   }
   $real_keystore = $backupkeystore ? {
-    ''      => "$fileserver/keys/backupkeys",
+    ''      => "{$fileserver}/keys/backupkeys",
     default => $backupkeystore,
   }
   $real_keytype = $backupkeytype ? {
@@ -14,7 +25,7 @@ class backupninja::client::defaults {
   }
   $real_keydestination = $keydestination ? {
     ''      => '/root/.ssh',
-    default => $keydestination,
+    kdefault => $keydestination,
   }
   $real_keyowner = $keyowner ? {
     ''      => 0,
@@ -32,7 +43,7 @@ class backupninja::client::defaults {
     ''      => true,
     default => $ssh_dir_manage
   }
-  if !defined(Package["backupninja"]) {
+  if !defined(Package['backupninja']) {
     if $backupninja_ensure_version == '' {
       $backupninja_ensure_version = 'installed'
     }
