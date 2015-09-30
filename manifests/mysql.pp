@@ -40,7 +40,7 @@ define backupninja::mysql(
     content => template('backupninja/mysql.conf.erb'),
     owner   => root,
     group   => root,
-    mode    => 0600,
+    mode    => '0600',
     require => File[$backupninja::client::defaults::configdir],
   }
 }

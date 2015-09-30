@@ -46,7 +46,7 @@ class backupninja::client inherits backupninja::client::defaults {
         if !defined(File[$key_dest]) {
           file { $key_dest:
             ensure => directory,
-            mode   => 0700,
+            mode   => '0700',
             owner  => $key_owner,
             group  => $key_group,
           }
@@ -54,7 +54,7 @@ class backupninja::client inherits backupninja::client::defaults {
         if !defined(File[$key_dest_file]) {
           file { $key_dest_file:
             source  => "${key_store}/${real_user}_id_${key_type}",
-            mode    => 0400,
+            mode    => '0400',
             owner   => $key_owner,
             group   => $key_group,
             require => File[$key_dest],

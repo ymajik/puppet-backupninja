@@ -19,7 +19,7 @@ class backupninja::server {
 
   file { $real_backupdir:
     ensure => 'directory',
-    mode   => 0710,
+    mode   => '0710',
     owner  => root,
     group  => 'backupninjas',
   }
@@ -34,7 +34,7 @@ class backupninja::server {
     file { '/usr/local/bin/checkbackups':
       ensure => 'present',
       source => "puppet://${servername}/backupninja/checkbackups.pl",
-      mode   => 0755,
+      mode   => '0755',
       owner  => root,
       group  => root,
     }
@@ -129,7 +129,7 @@ class backupninja::server {
     if !defined(File[$real_dir]) {
       @@file { $real_dir:
         ensure => directory,
-        mode   => 0750,
+        mode   => '0750',
         owner  => $real_user,
         group  => 0,
         tag    => $real_backuptag,
@@ -142,7 +142,7 @@ class backupninja::server {
             if !defined(File[$real_ssh_dir]) {
               @@file { $real_ssh_dir:
                 ensure  => directory,
-                mode    => 0700,
+                mode    => '0700',
                 owner   => $real_user,
                 group   => 0,
                 tag     => $real_backuptag,
@@ -159,7 +159,7 @@ class backupninja::server {
             if !defined(File["${real_ssh_dir}/${real_authorized_keys_file}"]) {
               @@file { "${real_ssh_dir}/${real_authorized_keys_file}":
                 ensure  => present,
-                mode    => 0644,
+                mode    => '0644',
                 owner   => 0,
                 group   => 0,
                 source  => "$real_backupkeys/${real_user}_id_${keytype}.pub",

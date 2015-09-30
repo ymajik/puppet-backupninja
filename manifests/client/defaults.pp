@@ -54,7 +54,7 @@ class backupninja::client::defaults (
   }
   file { $configdir:
     ensure => directory,
-    mode   => 750,
+    mode   => '0750',
     owner  => 0,
     group  => 0,
   }

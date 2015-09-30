@@ -44,7 +44,7 @@ define backupninja::maildir (
     content => template('backupninja/maildir.conf.erb'),
     owner   => root,
     group   => root,
-    mode    => 0600,
+    mode    => '0600',
     require => File[$backupninja::client::defaults::configdir],
   }
 }

@@ -31,7 +31,7 @@ define backupninja::labelmount (
     content => template('backupninja/labelmount.conf.erb'),
     owner   => root,
     group   => root,
-    mode    => 0600,
+    mode    => '0600',
     require => File["${backupninja::client::defaults::configdir}"]
   }
 
@@ -40,7 +40,7 @@ define backupninja::labelmount (
     content => template('backupninja/umount.conf.erb'),
     owner   => root,
     group   => root,
-    mode    => 0600,
+    mode    => '0600',
     require => File["${backupninja::client::defaults::configdir}"]
   }
 
@@ -51,7 +51,7 @@ define backupninja::labelmount (
     content => template('backupninja/labelmount.handler'),
     owner   => root,
     group   => root,
-    mode    => 0755,
+    mode    => '0755',
     require => Package['backupninja']
   }
 
@@ -59,7 +59,7 @@ define backupninja::labelmount (
     content => template('backupninja/umount.handler'),
     owner   => root,
     group   => root,
-    mode    => 0755,
+    mode    => '0755',
     require => Package['backupninja']
   }
 }
