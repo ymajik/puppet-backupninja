@@ -1,30 +1,53 @@
-class backupninja::server {
-  $real_backupdir = $backupdir ? {
-    ''      => "/backup",
-    default => $backupdir,
-  }
-  $real_usermanage = $usermanage ? {
-    ''      => 'doit',
-    default => $usermanage
-  }
-  $real_backupserver_tag = $backupserver_tag ? {
-    ''      => $fqdn,
-    default => $backupserver_tag
-  }
-
+# == Class: puppet-backupninja::server
+#
+# Backupninja server configuration.
+#
+# === Parameters
+#
+# [*backupdir*]
+#   Directory where backup will be stored.
+#   Default: /backup
+#
+# [*backupserver_tag*]
+#   Backup server tag.
+#   Default: ::fqdn
+#
+# [*nagios_server*]
+#   Name of the nagios server
+#   Default: undef
+#
+# === Examples
+#
+#  include '::puppet-backupninja::server'
+#
+# Configuration is done using Hiera.
+#
+# === Authors
+#
+# Baptiste Grenier <bgrenier@gnubila.fr>
+#
+# === Copyright
+#
+# Copyright 2015 gnúbila
+#
+class backupninja::server (
+  $backupdir = '/backup',
+  $backupserver_tag = $::fqdn,
+  $nagios_server = undef,
+) {
   group { 'backupninjas':
     ensure => 'present',
     gid    => 700
   }
 
-  file { $real_backupdir:
+  file { $backupdir:
     ensure => 'directory',
     mode   => '0710',
     owner  => root,
     group  => 'backupninjas',
   }
 
-  if $nagios_server {
+  if $nagios_server and $nagios_server != '' {
     if !defined(Package['nsca']) {
       package { 'nsca':
         ensure => installed;
@@ -40,7 +63,7 @@ class backupninja::server {
     }
 
     cron { 'checkbackups':
-      command => "/usr/local/bin/checkbackups -d ${real_backupdir} | /usr/sbin/send_nsca -H ${nagios_server} -c /etc/send_nsca.cfg | grep -v 'sent to host successfully'",
+      command => "/usr/local/bin/checkbackups -d ${backupdir} | /usr/sbin/send_nsca -H ${nagios_server} -c /etc/send_nsca.cfg | grep -v 'sent to host successfully'",
       user    => 'root',
       hour    => '8-23',
       minute  => 59,
@@ -51,9 +74,9 @@ class backupninja::server {
     }
   }
 
-  User <<| tag == "backupninja-${real_backupserver_tag}" |>>
-  File <<| tag == "backupninja-${real_backupserver_tag}" |>>
-  Ssh_authorized_key <<| tag == "backupninja-${real_backupserver_tag}" |>>
+  User <<| tag == "backupninja-${backupserver_tag}" |>>
+  File <<| tag == "backupninja-${backupserver_tag}" |>>
+  Ssh_authorized_key <<| tag == "backupninja-${backupserver_tag}" |>>
 
   if !defined(Package['rsync']) {
     if $rsync_ensure_version == '' {
@@ -88,15 +111,15 @@ class backupninja::server {
       ''      => $name,
     }
     $real_host = $host ? {
-      false   => $fqdn,
+      false   => $::fqdn,
       default => $host,
     }
     $real_backupkeys = $backupkeys ? {
-      false   => "${fileserver}/keys/backupkeys",
+      false   => "${::fileserver}/keys/backupkeys",
       default => $backupkeys,
     }
     $real_dir = $dir ? {
-      false   => "${backupninja::server::real_backupdir}/${fqdn}",
+      false   => "${backupninja::server::backupdir}/${::fqdn}",
       default => $dir,
     }
     $real_ssh_dir = $ssh_dir ? {
@@ -120,9 +143,9 @@ class backupninja::server {
     if $nagios_server {
       # configure a passive service check for backups
       nagios2::passive_service { "backups-${name}":
-        nagios2_host_name => $real_host,
+        nagios2_host_name   => $real_host,
         nagios2_description => $real_nagios2_description,
-        servicegroups => 'backups',
+        servicegroups       => 'backups',
       }
     }
 
@@ -162,7 +185,7 @@ class backupninja::server {
                 mode    => '0644',
                 owner   => 0,
                 group   => 0,
-                source  => "$real_backupkeys/${real_user}_id_${keytype}.pub",
+                source  => "${real_backupkeys}/${real_user}_id_${keytype}.pub",
                 require => File[$real_ssh_dir],
                 tag     => $real_backuptag,
               }
@@ -216,3 +239,5 @@ class backupninja::server {
     }
   }
 }
+
+# vim: set et sta sw=2 ts=2 sts=2 noci noai:
