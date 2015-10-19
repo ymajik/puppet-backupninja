@@ -30,7 +30,10 @@ define backupninja::mysql(
   $vsname = false,
 ) {
   $real_configfile = $configfile ? {
-    true    => '/etc/mysql/debian.cnf',
+    true       => ::osfamily ? {
+      'Debian' => '/etc/mysql/debian.cnf',
+      default  => '/etc/my.cnf',
+    },
     default => $configfile,
   }
 
