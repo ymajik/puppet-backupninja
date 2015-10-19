@@ -29,15 +29,16 @@ define backupninja::mysql(
   $configfile = true,
   $vsname = false,
 ) {
+  include ::backupninja::client::defaults
+
   $real_configfile = $configfile ? {
-    true       => ::osfamily ? {
+    true       => $::osfamily ? {
       'Debian' => '/etc/mysql/debian.cnf',
       default  => '/etc/my.cnf',
     },
     default => $configfile,
   }
 
-  include backupninja::client::defaults
   file { "${backupninja::client::defaults::configdir}/${order}_${name}.mysql":
     ensure  => $ensure,
     content => template('backupninja/mysql.conf.erb'),
