@@ -2,17 +2,31 @@
 # management system.  Any changes you make to this file will be overwritten
 # the next time Puppet runs.  Please make configuration changes to this
 # service in Puppet.
-
-<% %w{user dbusername dbpassword dbhost databases backupdir vsname}.each do |v|
-	if send(v)
-		-%><%= v + ' = ' + send(v) + "\n" %><%
-	end
-end -%>
+<% if @user -%>
+user = <%= @user -%>
+<% end -%>
+<% if @dbusername -%>
+dbusername = <%= @dbusername -%>
+<% end -%>
+<% if @dbpassword -%>
+dbpassword = <%= @dbpassword -%>
+<% end -%>
+<% if @dbhost -%>
+dbhost = <%= @dbhost -%>
+<% end -%>
+<% if @databases -%>
+databases = <%= @databases -%>
+<% end -%>
+<% if @backupdir -%>
+backupdir = <%= @backupdir -%>
+<% end -%>
+<% if @vsname -%>
+vsname = <%= @vsname -%>
+<% end -%>
+<% if @real_configfile -%>
+configfile = <%= @real_configfile %>
+<% end -%>
 
 hotcopy = <%= @hotcopy ? 'yes' : 'no' %>
 sqldump = <%= @sqldump ? 'yes' : 'no' %>
 compress = <%= @compress ? 'yes' : 'no' %>
-
-<% if @real_configfile %>
-configfile = <%= @real_configfile %>
-<% end %>
