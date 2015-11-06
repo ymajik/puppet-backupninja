@@ -4,7 +4,7 @@
 # service in Puppet.
 
 loglevel = <%= @loglvl %>
-when = <%= send(:when) %>
+when = <%= @when %>
 reportemail = <%= @reportemail %>
 reportsuccess = <%= @reportsuccess ? 'yes' : 'no' %>
 reportwarning = <%= @reportwarning ? 'yes' : 'no' %>
