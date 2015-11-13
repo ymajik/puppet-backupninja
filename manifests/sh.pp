@@ -9,18 +9,20 @@
 #      (but be sure to keep the configdir, name, and order the same, so
 #      that we can find the correct file to remove).
 #
-# 
-define backupninja::sh($order = 50,
-                           $ensure = present,
-                           $command_string
-                          ) {
-                          include backupninja::client::defaults
-	file { "${backupninja::client::defaults::configdir}/${order}_${name}.sh":
-		ensure => $ensure,
-		content => template('backupninja/sh.conf.erb'),
-		owner => root,
-		group => root,
-		mode => 0600,
-		require => File["${backupninja::client::defaults::configdir}"]
-	}
+#
+define backupninja::sh (
+  $order = 50,
+  $ensure = present,
+  $command_string,
+) {
+  include backupninja::client::defaults
+
+  file { "${backupninja::client::defaults::configdir}/${order}_${name}.sh":
+    ensure  => $ensure,
+    content => template('backupninja/sh.conf.erb'),
+    owner   => root,
+    group   => root,
+    mode    => '0600',
+    require => File[$backupninja::client::defaults::configdir],
+  }
 }

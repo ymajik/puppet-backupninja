@@ -2,17 +2,23 @@
 # management system.  Any changes you make to this file will be overwritten
 # the next time Puppet runs.  Please make configuration changes to this
 # service in Puppet.
+<% if @parentdir -%>
+parentdir = <%= @parentdir %>
+<% end -%>
+<% if @packagesfile -%>
+packagesfile = <%= @packagesfile %>
+<% end -%>
+<% if @partitionsfile -%>
+partitionsfile = <%= @partitionsfile %>
+<% end -%>
+<% if @hardwarefile -%>
+hardwarefile = <%= @hardwarefile %>
+<% end -%>
 
-<% %w{parentdir packagesfile partitionsfile hardwarefile}.each do |v|
-	if send(v)
-		-%><%= v + ' = ' + send(v) + "\n" %><%
-	end
-end -%>
-
-packages = <%= packages ? 'yes' : 'no' %>
-partitions = <%= partitions ? 'yes' : 'no' %>
-dosfdisk = <%= dosfdisk ? 'yes' : 'no' %>
-hardware = <%= hardware ? 'yes' : 'no' %>
-dohwinfo = <%= dohwinfo ? 'yes' : 'no' %>
-luksheaders = <%= doluks ? 'yes' : 'no' %>
-lvm = <%= dolvm ? 'yes' : 'no' %>
+packages = <%= @packages ? 'yes' : 'no' %>
+partitions = <%= @partitions ? 'yes' : 'no' %>
+dosfdisk = <%= @dosfdisk ? 'yes' : 'no' %>
+hardware = <%= @hardware ? 'yes' : 'no' %>
+dohwinfo = <%= @dohwinfo ? 'yes' : 'no' %>
+luksheaders = <%= @doluks ? 'yes' : 'no' %>
+lvm = <%= @dolvm ? 'yes' : 'no' %>

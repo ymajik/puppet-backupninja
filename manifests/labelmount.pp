@@ -18,46 +18,48 @@
 #
 #   dest: The directory to mount the partition onto.
 # 
-define backupninja::labelmount($order = 10,
-                               $ensure = present,
-                               $label,
-                               $dest
-                              ) {
-	include backupninja::client::defaults
-	file { "${backupninja::client::defaults::configdir}/${order}_${name}.labelmount":
-		ensure => $ensure,
-		content => template('backupninja/labelmount.conf.erb'),
-		owner => root,
-		group => root,
-		mode => 0600,
-		require => File["${backupninja::client::defaults::configdir}"]
-	}
+define backupninja::labelmount (
+  $order = 10,
+  $ensure = present,
+  $label,
+  $dest,
+) {
+  include backupninja::client::defaults
 
-	file { "${backupninja::client::defaults::configdir}/99_${name}.umount":
-		ensure => $ensure,
-		content => template('backupninja/umount.conf.erb'),
-		owner => root,
-		group => root,
-		mode => 0600,
-		require => File["${backupninja::client::defaults::configdir}"]
-	}
-	
-	# Copy over the handler scripts themselves, since they're not in the
-	# standard distribution, and are unlikely to end up there any time
-	# soon because backupninja's "build" system is balls.
-	file { "/usr/share/backupninja/labelmount":
-		content => template('backupninja/labelmount.handler'),
-		owner => root,
-		group => root,
-		mode => 0755,
-		require => Package[backupninja]
-	}
+  file { "${backupninja::client::defaults::configdir}/${order}_${name}.labelmount":
+    ensure  => $ensure,
+    content => template('backupninja/labelmount.conf.erb'),
+    owner   => root,
+    group   => root,
+    mode    => '0600',
+    require => File["${backupninja::client::defaults::configdir}"]
+  }
 
-	file { "/usr/share/backupninja/umount":
-		content => template('backupninja/umount.handler'),
-		owner => root,
-		group => root,
-		mode => 0755,
-		require => Package[backupninja]
-	}
+  file { "${backupninja::client::defaults::configdir}/99_${name}.umount":
+    ensure  => $ensure,
+    content => template('backupninja/umount.conf.erb'),
+    owner   => root,
+    group   => root,
+    mode    => '0600',
+    require => File["${backupninja::client::defaults::configdir}"]
+  }
+
+  # Copy over the handler scripts themselves, since they're not in the
+  # standard distribution, and are unlikely to end up there any time
+  # soon because backupninja's "build" system is balls.
+  file { '/usr/share/backupninja/labelmount':
+    content => template('backupninja/labelmount.handler'),
+    owner   => root,
+    group   => root,
+    mode    => '0755',
+    require => Package['backupninja']
+  }
+
+  file { '/usr/share/backupninja/umount':
+    content => template('backupninja/umount.handler'),
+    owner   => root,
+    group   => root,
+    mode    => '0755',
+    require => Package['backupninja']
+  }
 }
