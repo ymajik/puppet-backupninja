@@ -1,6 +1,8 @@
 Backupninja Module
 -------------------
 
+Fork of the official riseuplabs/backupninja module as it is inactive.
+
 This module helps you configure all of your backups with puppet, using 
 backupninja!
 
