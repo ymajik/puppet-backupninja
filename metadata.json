@@ -1,0 +1,43 @@
+{
+  "name": "gnubilafrance-backupninja",
+  "version": "0.0.1",
+  "author": "Baptiste Grenier <bgrenier@gnubila.fr>",
+  "license": "MIT",
+  "summary": "Simple backup solution management: backupninja",
+
+  "source": "https://github.com/gnubila-france/puppet-backupninja",
+  "project_page": "https://github.com/gnubila-france/puppet-backupninja",
+  "issues_url": "https://github.com/gnubila-france/puppet-backupninja/issues",
+
+  "tags": [ "backup", "backupninja", "shell" ],
+
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    }
+  ],
+
+  "dependencies": [
+    { "name": "puppetlabs/stdlib", "version_requirement": ">= 2.3.0" }
+  ]
+}
