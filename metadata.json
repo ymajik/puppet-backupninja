@@ -1,6 +1,6 @@
 {
   "name": "gnubilafrance-backupninja",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "author": "Baptiste Grenier <bgrenier@gnubila.fr>",
   "license": "MIT",
   "summary": "Simple backup solution management: backupninja",
