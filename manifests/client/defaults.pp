@@ -3,6 +3,7 @@ class backupninja::client::defaults (
   $cfg_override = '',
   $backupkeytype = '',
   $backupkeytype = '',
+  $backupkeystore = '',
   $keydestination = '',
   $keyowner = '',
   $keygroup = '',
@@ -15,7 +16,7 @@ class backupninja::client::defaults (
     default => $cfg_override,
   }
   $real_keystore = $backupkeystore ? {
-    ''      => "{$fileserver}/keys/backupkeys",
+    ''      => "${::fileserver}/keys/backupkeys",
     default => $backupkeystore,
   }
   $real_keytype = $backupkeytype ? {

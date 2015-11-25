@@ -1,5 +1,8 @@
+# == Class: backupninja::client::maildir
+#
+# Manage rsync installation
 class backupninja::client::maildir inherits backupninja::client::defaults {
-  if !defined(Package["rsync"]) {
+  if !defined(Package['rsync']) {
     if $rsync_ensure_version == '' {
       $rsync_ensure_version = 'installed'
     }

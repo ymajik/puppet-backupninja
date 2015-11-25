@@ -13,7 +13,7 @@
 #   hotcopy, sqldump, compress, configfile: As defined in the
 #   backupninja documentation, with the caveat that hotcopy, sqldump,
 #   and compress take true/false rather than yes/no.
-# 
+#
 define backupninja::mysql(
   $order = 10,
   $ensure = present,

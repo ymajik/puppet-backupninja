@@ -1,3 +1,6 @@
+# == Class: backupninja::client
+#
+# Manage client
 class backupninja::client inherits backupninja::client::defaults {
   define key (
     $user = false,

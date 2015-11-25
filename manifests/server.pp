@@ -1,4 +1,4 @@
-# == Class: puppet-backupninja::server
+# == Class: backupninja::server
 #
 # Backupninja server configuration.
 #
@@ -18,7 +18,7 @@
 #
 # === Examples
 #
-#  include '::puppet-backupninja::server'
+#  include '::backupninja::server'
 #
 # Configuration is done using Hiera.
 class backupninja::server (
