@@ -17,12 +17,12 @@
 #   label: The partition label to mount.
 #
 #   dest: The directory to mount the partition onto.
-# 
+#
 define backupninja::labelmount (
   $order = 10,
   $ensure = present,
-  $label,
-  $dest,
+  $label = '',
+  $dest = '',
 ) {
   include backupninja::client::defaults
 
@@ -32,7 +32,7 @@ define backupninja::labelmount (
     owner   => root,
     group   => root,
     mode    => '0600',
-    require => File["${backupninja::client::defaults::configdir}"]
+    require => File[$backupninja::client::defaults::configdir]
   }
 
   file { "${backupninja::client::defaults::configdir}/99_${name}.umount":
@@ -41,7 +41,7 @@ define backupninja::labelmount (
     owner   => root,
     group   => root,
     mode    => '0600',
-    require => File["${backupninja::client::defaults::configdir}"]
+    require => File[$backupninja::client::defaults::configdir]
   }
 
   # Copy over the handler scripts themselves, since they're not in the
