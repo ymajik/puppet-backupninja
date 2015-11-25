@@ -1,5 +1,8 @@
+# == Class: backupninja::client::duplicity
+#
+# Manage duplicty installation
 class backupninja::client::duplicity inherits backupninja::client::defaults {
-  if !defined(Package["duplicity"]) {
+  if !defined(Package['duplicity']) {
     if $duplicity_ensure_version == '' {
       $duplicity_ensure_version = 'installed'
     }
