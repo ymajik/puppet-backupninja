@@ -1,6 +1,9 @@
 Backupninja Module
 -------------------
 
+[![Puppet Forge](http://img.shields.io/puppetforge/v/gnubilafrance/backupninja.svg)](https://forge.puppetlabs.com/gnubilafrance/backupninja)
+[![Build Status](https://travis-ci.org/gnubila-france/puppet-backupninja.png?branch=master)](https://travis-ci.org/gnubila-france/puppet-backupninja)
+
 Fork of the official riseuplabs/backupninja module as it is inactive.
 
 This module helps you configure all of your backups with puppet, using 
