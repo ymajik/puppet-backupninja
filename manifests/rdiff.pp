@@ -14,7 +14,7 @@
 #      in the correct sections automatically.  The include and exclude
 #      options should be given as arrays if you want to specify multiple
 #      directories.
-# 
+#
 define backupninja::rdiff(
   $order = 90,
   $ensure = present,
@@ -23,22 +23,22 @@ define backupninja::rdiff(
   $host = false,
   $type = 'local',
   $exclude = [
-    "/home/*/.gnupg",
-    "/home/*/.local/share/Trash",
-    "/home/*/.Trash",
-    "/home/*/.thumbnails",
-    "/home/*/.beagle",
-    "/home/*/.aMule",
-    "/home/*/gtk-gnutella-downloads",
+    '/home/*/.gnupg',
+    '/home/*/.local/share/Trash',
+    '/home/*/.Trash',
+    '/home/*/.thumbnails',
+    '/home/*/.beagle',
+    '/home/*/.aMule',
+    '/home/*/gtk-gnutella-downloads',
     ],
   $include = [
-    "/var/spool/cron/crontabs",
-    "/var/backups",
-    "/etc",
-    "/root",
-    "/home",
-    "/usr/local/*bin",
-    "/var/lib/dpkg/status*",
+    '/var/spool/cron/crontabs',
+    '/var/backups',
+    '/etc',
+    '/root',
+    '/home',
+    '/usr/local/*bin',
+    '/var/lib/dpkg/status*',
     ],
   $vsinclude = false,
   $keep = 30,
@@ -52,7 +52,7 @@ define backupninja::rdiff(
   $key = false,
   $backuptag = false,
   $home = false,
-  $backupkeytype = "rsa",
+  $backupkeytype = 'rsa',
   $backupkeystore = false,
   $extras = false,
   $nagios2_description = 'backups',
@@ -64,11 +64,7 @@ define backupninja::rdiff(
       $directory = "${home}/rdiff-backup/"
     }
     'remote': {
-      case $host {
-        false: {
-          err("need to define a host for remote backups!")
-        }
-      }
+      validate_string($host)
       $real_backuptag = $backuptag ? {
         false   => "backupninja-${host}",
         default => $backuptag
@@ -81,7 +77,7 @@ define backupninja::rdiff(
 
       backupninja::server::sandbox { "${user}-${name}":
         user                 => $user,
-        host                 => $fqdn,
+        host                 => $::fqdn,
         dir                  => $real_home,
         manage_ssh_dir       => $ssh_dir_manage,
         ssh_dir              => $ssh_dir,

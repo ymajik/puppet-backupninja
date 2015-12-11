@@ -13,7 +13,7 @@
 define backupninja::sh (
   $order = 50,
   $ensure = present,
-  $command_string,
+  $command_string = '',
 ) {
   include backupninja::client::defaults
 
