@@ -51,7 +51,6 @@ define backupninja::rdiff(
   $installkey = true,
   $key = false,
   $backuptag = false,
-  $home = false,
   $backupkeytype = 'rsa',
   $backupkeystore = false,
   $extras = false,
