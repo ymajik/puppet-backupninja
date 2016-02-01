@@ -2,7 +2,6 @@
 class backupninja::client::defaults (
   $cfg_override = '',
   $backupkeytype = '',
-  $backupkeytype = '',
   $backupkeystore = '',
   $keydestination = '',
   $keyowner = '',
