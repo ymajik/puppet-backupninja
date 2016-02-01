@@ -15,7 +15,7 @@
 #      options should be given as arrays if you want to specify multiple
 #      directories.
 #
-define backupninja::rdiff(
+define backupninja::rdiff (
   $order = 90,
   $ensure = present,
   $user = false,
@@ -56,7 +56,7 @@ define backupninja::rdiff(
   $extras = false,
   $nagios2_description = 'backups',
 ) {
-  include backupninja::client::rdiff_backup
+  include ::backupninja::client::rdiff_backup
 
   case $type {
     'local': {
