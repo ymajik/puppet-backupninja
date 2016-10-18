@@ -28,5 +28,16 @@ configfile = <%= @real_configfile %>
 <% end -%>
 
 hotcopy = <%= @hotcopy ? 'yes' : 'no' %>
-sqldump = <%= @sqldump ? 'yes' : 'no' %>
+
+<% if @sqldump -%>
+sqldump = yes
+<% if @sqldumpoptions.is_a? String -%>
+<%= 'sqldumpoptions = ' + @sqldumpoptions %>
+<% elsif @sqldumpoptions.is_a? Array -%>
+<%= 'sqldumpoptions = ' + @sqldumpoptions.map { |i| "#{i}" }.join(" ") %>
+<% end -%>
+<% else -%>
+sqldump = no
+<% end -%>
+
 compress = <%= @compress ? 'yes' : 'no' %>

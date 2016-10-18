@@ -10,7 +10,7 @@
 #      that we can find the correct file to remove).
 #
 #   user, dbusername, dbpassword, dbhost, databases, backupdir,
-#   hotcopy, sqldump, compress, configfile: As defined in the
+#   hotcopy, sqldump, sqldumpoptions, compress, configfile: As defined in the
 #   backupninja documentation, with the caveat that hotcopy, sqldump,
 #   and compress take true/false rather than yes/no.
 #
@@ -25,6 +25,7 @@ define backupninja::mysql(
   $backupdir = false,
   $hotcopy = false,
   $sqldump = false,
+  $sqldumpoptions = '',
   $compress = false,
   $configfile = true,
   $vsname = false,
