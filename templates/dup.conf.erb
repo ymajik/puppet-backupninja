@@ -35,9 +35,14 @@
 
 [dest]
 <%= 'incremental = ' + @incremental if @incremental %>
+<%= 'increments = ' + @increments if @increments %>
 <%= 'keep = ' + @keep if @keep %>
 <%= 'bandwidthlimit = ' + @bandwidthlimit if @bandwidthlimit %>
 <%= 'sshoptions = ' + @sshoptions if @sshoptions %>
+<% if @local -%>
+<%= 'desturl = file://' + @destdir if @destdir %>
+<% else -%>
 <%= 'destdir = ' + @destdir if @destdir %>
 <%= 'desthost = ' + @desthost if @desthost %>
 <%= 'destuser = ' + @destuser if @destuser %>
+<% end -%>

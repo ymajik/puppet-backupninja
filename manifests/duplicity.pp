@@ -75,7 +75,9 @@ define backupninja::duplicity (
     ],
   $vsinclude = false,
   # [dest]
+  $local = false,
   $incremental = 'yes',
+  $increments = 30,
   $keep = false,
   $bandwidthlimit = false,
   $sshoptions = false,
@@ -102,27 +104,29 @@ define backupninja::duplicity (
   validate_string($destdir)
   validate_string($password)
 
-  # guarantees there's a configured backup space for this backup
-  backupninja::server::sandbox { "${user}-${name}":
-    user                 => $destuser,
-    host                 => $desthost,
-    dir                  => $destdir,
-    manage_ssh_dir       => $ssh_dir_manage,
-    ssh_dir              => $ssh_dir,
-    authorized_keys_file => $authorized_keys_file,
-    installuser          => $installuser,
-    backuptag            => $backuptag,
-    backupkeys           => $backupkeystore,
-    keytype              => $backupkeytype,
-  }
+  if not $local {
+    # guarantees there's a configured backup space for this backup
+    backupninja::server::sandbox { "${user}-${name}":
+      user                 => $destuser,
+      host                 => $desthost,
+      dir                  => $destdir,
+      manage_ssh_dir       => $ssh_dir_manage,
+      ssh_dir              => $ssh_dir,
+      authorized_keys_file => $authorized_keys_file,
+      installuser          => $installuser,
+      backuptag            => $backuptag,
+      backupkeys           => $backupkeystore,
+      keytype              => $backupkeytype,
+    }
 
-  # the client's ssh key
-  backupninja::client::key { "${destuser}-${name}":
-    user       => $destuser,
-    host       => $desthost,
-    installkey => $installkey,
-    keytype    => $backupkeytype,
-    keystore   => $backupkeystore,
+    # the client's ssh key
+    backupninja::client::key { "${destuser}-${name}":
+      user       => $destuser,
+      host       => $desthost,
+      installkey => $installkey,
+      keytype    => $backupkeytype,
+      keystore   => $backupkeystore,
+    }
   }
 
   # the backupninja rule for this duplicity backup
