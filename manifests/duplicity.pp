@@ -104,7 +104,7 @@ define backupninja::duplicity (
   validate_string($destdir)
   validate_string($password)
 
-  if not $local {
+  if !$local {
     # guarantees there's a configured backup space for this backup
     backupninja::server::sandbox { "${user}-${name}":
       user                 => $destuser,
