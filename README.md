@@ -30,7 +30,9 @@ Getting started
 
 First you will need to import the module:
 
+```puppet
   import "backupninja"
+```
 
 Configure your backup server
 ----------------------------
@@ -38,7 +40,9 @@ Configure your backup server
 Now you will need to configure a backup server by adding the following
 to your node definition for that server:
   
+```puppet
   include backupninja::server
+```
 
 By configuring a backupninja::server, this module will automatically
 create sandboxed users on the server for each client for their
@@ -57,7 +61,9 @@ installed automatically when you include any of the different handlers
 (as long as you are not handling it elsewhere in your manifests), for
 example:
 
+```puppet
 include backupninja::client::rdiff_backup
+```
 
 In this case, the module will make sure that the backupninja package
 and the required rdiff-backup package are 'installed'/'present' (using
@@ -66,12 +72,14 @@ version of either backupninja itself, or the specific programs that
 the handler class installs, you can specify the version you need
 installed by providing a variable, for example:
 
+```
 $backupninja_ensure_version = "0.9.7~bpo50+1"
 $rdiff_backup_ensure_version = "1.2.5-1~bpo40+1"
 $rsync_ensure_version = "3.0.6-1~bpo50+1"
 $duplicity_ensure_version = "0.6.04-1~bpo50+1"
 $debconf_utils_ensure_version = "1.5.28"
 $hwinfo_ensure_version = "16.0-2"
+```
 
 If you do not specify these variables the default 'installed/present'
 version will be installed when you include this class.
@@ -92,29 +100,35 @@ Included below are some configuration examples for different handlers.
 
 * An example mysql handler configuration:
 
+```puppet
 backupninja::mysql { all_databases:
 	user => root,
 	backupdir => '/var/backups',
 	compress => true,
 	sqldump => true
 }
+```
 
 * An example rdiff-backup handler configuration:
 
+```puppet
 backupninja::rdiff { backup_all:
 	directory => '/media/backupdisk',
 	include => ['/var/backups', '/home', '/var/lib/dpkg/status'],
 	exclude => '/home/*/.gnupg'
 }
+```
 
 * A remote rdiff-backup handler:
 
+```puppet
     backupninja::rdiff { "main":
         host => "backup.example.com",
         type => "remote",
         directory => "/backup/$fqdn",
         user => "backup-$hostname",
     }
+```
 
 
 Configuring backupninja itself
@@ -127,12 +141,15 @@ can find them inside this module as well.
 
 For example:
 
+```puppet
 backupninja::config { conf:
 	loglvl => 3,
 	usecolors => false,
 	reportsuccess => false,
 	reportwarning => true;
 }
+```
+
 
 
 Nagios alerts about backup freshness
