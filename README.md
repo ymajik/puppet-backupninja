@@ -6,7 +6,7 @@ Backupninja Module
 
 Fork of the official riseuplabs/backupninja module as it is inactive.
 
-This module helps you configure all of your backups with puppet, using 
+This module helps you configure all of your backups with puppet, using
 backupninja!
 
 ! Upgrade notice !
@@ -39,19 +39,20 @@ Configure your backup server
 
 Now you will need to configure a backup server by adding the following
 to your node definition for that server:
-  
+
 ```puppet
   include backupninja::server
 ```
 
 By configuring a backupninja::server, this module will automatically
 create sandboxed users on the server for each client for their
-backups. 
+backups.
 
 You may also want to set some variables on your backup server, such as:
 
+```puppet
   $backupdir = "/backups"
-
+```
 
 Configure your backup clients
 -----------------------------
@@ -72,7 +73,7 @@ version of either backupninja itself, or the specific programs that
 the handler class installs, you can specify the version you need
 installed by providing a variable, for example:
 
-```
+```puppet
 $backupninja_ensure_version = "0.9.7~bpo50+1"
 $rdiff_backup_ensure_version = "1.2.5-1~bpo40+1"
 $rsync_ensure_version = "3.0.6-1~bpo50+1"
@@ -170,5 +171,3 @@ To use this feature a few pre-requisites are necessary:
  . using a nagios puppet module that can create passive service checks
  . backups must be under $home/dup, $home/rdiff-backup depending on method
  . $nagios_server must be set before the class is included
-
-
